@@ -1,0 +1,149 @@
+========================================
+MEDCARE E-PRESCRIPTION API
+TEST CASES
+========================================
+
+
+========================================
+TEST CASE 1
+DOCTOR LOGIN + CREATE PRESCRIPTION
+========================================
+
+Register:
+
+POST /api/v1/medical/register
+
+Request:
+{
+    "username": "doctor01",
+    "password": "doctor123",
+    "role": "doctor"
+}
+
+Result:
+200 OK
+
+
+Login:
+
+POST /api/v1/medical/login
+
+Request:
+{
+    "username": "doctor01",
+    "password": "doctor123"
+}
+
+Result:
+200 OK
+
+JWT received:
+eyJhbGciOiJIUzI1NiIs...
+
+
+Create prescription:
+
+POST /api/v1/prescriptions
+
+Authorization:
+Bearer <JWT>
+
+Result:
+200 OK
+
+Message:
+Tạo đơn thuốc thành công
+
+
+========================================
+TEST CASE 2
+PHARMACIST RBAC
+========================================
+
+Register:
+
+POST /api/v1/medical/register
+
+Request:
+{
+    "username": "pharma01",
+    "password": "pharma123",
+    "role": "pharmacist"
+}
+
+Result:
+200 OK
+
+
+Login:
+
+POST /api/v1/medical/login
+
+Request:
+{
+    "username": "pharma01",
+    "password": "pharma123"
+}
+
+Result:
+200 OK
+
+
+Create prescription:
+
+POST /api/v1/prescriptions
+
+Authorization:
+Bearer <PHARMACIST_JWT>
+
+Result:
+403 Forbidden
+
+Message:
+Không đủ quyền hạn
+
+
+View prescriptions:
+
+GET /api/v1/prescriptions/view
+
+Authorization:
+Bearer <PHARMACIST_JWT>
+
+Result:
+200 OK
+
+
+========================================
+TEST CASE 3
+FORGED JWT
+========================================
+
+Original JWT:
+
+eyJhbGciOiJIUzI1NiIs...
+
+Modified JWT:
+
+eyJhbGciOiJIUzI1NiIs...
+
+One character was modified.
+
+
+Request:
+
+GET /api/v1/prescriptions/view
+
+Authorization:
+Bearer <MODIFIED_JWT>
+
+Result:
+401 Unauthorized
+
+Message:
+Token không hợp lệ
+
+
+========================================
+END OF TEST
+========================================
